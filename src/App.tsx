@@ -11,8 +11,14 @@ function App() {
     <Layout style={{ backgroundColor: "white" }}>
       <Header style={{ backgroundColor: "white", paddingTop: "10px" }}>
         <Steps current={1}>
-          <Step title="Easy PR bot" />
-          <Step title="Label Up Bot" />
+          <Step
+            title="Поиск блогеров"
+            subTitle="Укажите параметры для поиска блогеров"
+          />
+          <Step
+            title="Анализ блогеров"
+            subTitle="Укажите данные из TG для анализа блогеров"
+          />
         </Steps>
       </Header>
       <Content
