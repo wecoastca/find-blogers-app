@@ -1,4 +1,5 @@
 import { Button, Form, Input, Select, Slider } from "antd";
+import axios from "axios";
 import { FC } from "react";
 import styles from "./EasyPrBotForm.module.css";
 
@@ -80,8 +81,12 @@ const adFormat = [
 
 export const EasyPrBotForm: FC = (props) => {
   const onFinish = (values: any) => {
-    console.log(values);
-    //fetch
+    // console.log(values);
+    axios({
+      method: 'post',
+      url: 'http://127.0.0.1:8000/getBlogers/',
+      data: values
+    }).then((x) => console.log(x));
   };
 
   return (
