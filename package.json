@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@ant-design/icons": "^4.6.3",
+    "js-file-download": "^0.4.12",
     "web-vitals": "^2.1.0"
   }
 }

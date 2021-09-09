@@ -1,5 +1,6 @@
 import { Button, Form, Input, Select, Slider } from "antd";
 import axios from "axios";
+import fileDownload from 'js-file-download';
 import { FC } from "react";
 import styles from "./EasyPrBotForm.module.css";
 
@@ -81,19 +82,22 @@ const adFormat = [
 
 export const EasyPrBotForm: FC = (props) => {
   const onFinish = (values: any) => {
-    // console.log(values);
     axios({
       method: 'post',
       url: 'http://127.0.0.1:8000/getBlogers/',
+      responseType: 'blob',
       data: values
-    }).then((x) => console.log(x));
+    }).then((res) => {
+      fileDownload(res?.data, values?.filename);
+    });
+
   };
 
   return (
     <Form
       className={styles.easyLayout}
       initialValues={{
-        filename: "my_podbor.csv",
+        filename: "my_podbor.xlsx",
       }}
       onFinish={onFinish}
     >
