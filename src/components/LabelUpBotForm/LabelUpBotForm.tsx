@@ -3,6 +3,7 @@ import { FC, useState } from "react";
 import styles from "./LabelUpBotForm.module.css";
 import { InboxOutlined } from "@ant-design/icons";
 import { useForm } from "antd/lib/form/Form";
+import axios from "axios";
 
 export const LabelUpBotForm: FC = (props) => {
   const [form] = useForm();
@@ -10,16 +11,24 @@ export const LabelUpBotForm: FC = (props) => {
 
   const onAllChecked = (checked: boolean) => setAllChecked(checked);
 
+  //TODO: Чтобы не костылить с тоглом Выбрать всех, достаточно после первой формы доставать количество блогеров и подставлять в Slider.
   const onFinish = (values: any) => {
-    const { blogersInterval, ...otherValues } = values;
-    console.log({
-      blogersInterval: allChecked ? -1 : values?.blogersInterval,
-      ...otherValues,
-    });
-    //fetch
+
+    const formData = new FormData();
+    formData.append('file', values?.file);
+    formData.append('numFirstBloger', allChecked ? "-1" : `${values?.blogersInterval?.[0]}`);
+    formData.append('numLastBloger', allChecked ? "-1" : `${values?.blogersInterval?.[1]}`);
+    formData.append('apiHash', values?.apiHash);
+    formData.append('apiId', values?.apiId);
+    formData.append('phone', values?.phone);
+
+    axios.post('http://127.0.0.1:8000/analyzeBlogers/', formData, {headers: {
+      "Content-Type": "multipart/form-data",
+    }});
   };
+
   return (
-    <Form form={form} className={styles.labelupLayout} onFinish={onFinish}>
+    <Form form={form} className={styles.labelupLayout} onFinish={onFinish} initialValues={{apiHash: "59383793f893b510b7ccd28e5d92c674", apiId:"6288850", phone: "+79150865215"}}>
       <Form.Item label="Файл для анализа" name="file">
         <Upload.Dragger
           beforeUpload={() => false}
