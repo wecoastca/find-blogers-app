@@ -1,7 +1,7 @@
-import { Button, Form, Input, Select, Slider } from "antd";
+import { Button, Form, Input, Select, Slider, Spin } from "antd";
 import axios from "axios";
 import fileDownload from 'js-file-download';
-import { FC } from "react";
+import { FC, useState } from "react";
 import styles from "./EasyPrBotForm.module.css";
 
 const categories = [
@@ -81,7 +81,9 @@ const adFormat = [
 ];
 
 export const EasyPrBotForm: FC = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
   const onFinish = (values: any) => {
+    setIsLoading(true);
     axios({
       method: 'post',
       url: 'http://127.0.0.1:8000/getBlogers/',
@@ -89,7 +91,7 @@ export const EasyPrBotForm: FC = (props) => {
       data: values
     }).then((res) => {
       fileDownload(res?.data, values?.filename);
-    });
+    }).finally(() => setIsLoading(false));
 
   };
 
@@ -101,6 +103,7 @@ export const EasyPrBotForm: FC = (props) => {
       }}
       onFinish={onFinish}
     >
+      <Spin spinning={isLoading}>
       <Form.Item label="Категории" name="categories">
         <Select mode="multiple" allowClear placeholder="Выберите категории">
           {categories?.map((x, index) => (
@@ -136,6 +139,7 @@ export const EasyPrBotForm: FC = (props) => {
           Подобрать блогеров
         </Button>
       </Form.Item>
+      </Spin>
     </Form>
   );
 };

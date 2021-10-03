@@ -1,13 +1,15 @@
-import { Button, Form, Input, Slider, Switch, Upload } from "antd";
+import { Button, Form, Input, Slider, Spin, Switch, Upload } from "antd";
 import { FC, useState } from "react";
 import styles from "./LabelUpBotForm.module.css";
 import { InboxOutlined } from "@ant-design/icons";
 import { useForm } from "antd/lib/form/Form";
 import axios from "axios";
+import fileDownload from "js-file-download";
 
 export const LabelUpBotForm: FC = (props) => {
   const [form] = useForm();
   const [allChecked, setAllChecked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onAllChecked = (checked: boolean) => setAllChecked(checked);
 
@@ -22,13 +24,15 @@ export const LabelUpBotForm: FC = (props) => {
     formData.append('apiId', values?.apiId);
     formData.append('phone', values?.phone);
 
+    setIsLoading(true);
     axios.post('http://127.0.0.1:8000/analyzeBlogers/', formData, {headers: {
       "Content-Type": "multipart/form-data",
-    }});
+    }}).then((res) => fileDownload(res?.data, 'labelup.xlsx')).finally(() => setIsLoading(false));
   };
 
   return (
     <Form form={form} className={styles.labelupLayout} onFinish={onFinish} initialValues={{apiHash: "59383793f893b510b7ccd28e5d92c674", apiId:"6288850", phone: "+79150865215"}}>
+      <Spin spinning={isLoading}>
       <Form.Item label="Файл для анализа" name="file">
         <Upload.Dragger
           beforeUpload={() => false}
@@ -63,6 +67,7 @@ export const LabelUpBotForm: FC = (props) => {
           Проанализировать блогеров
         </Button>
       </Form.Item>
+      </Spin>
     </Form>
   );
 };
