@@ -25,7 +25,7 @@ export const LabelUpBotForm: FC = (props) => {
     formData.append('phone', values?.phone);
 
     setIsLoading(true);
-    axios.post('http://127.0.0.1:8000/analyzeBlogers/', formData, {headers: {
+    axios.post('https://find-blogers-api.herokuapp.com/analyzeBlogers/', formData, {headers: {
       "Content-Type": "multipart/form-data",
     }}).then((res) => fileDownload(res?.data, 'labelup.xlsx')).finally(() => setIsLoading(false));
   };

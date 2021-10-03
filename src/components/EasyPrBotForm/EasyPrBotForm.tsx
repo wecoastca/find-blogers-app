@@ -86,7 +86,7 @@ export const EasyPrBotForm: FC = (props) => {
     setIsLoading(true);
     axios({
       method: 'post',
-      url: 'http://127.0.0.1:8000/getBlogers/',
+      url: 'https://find-blogers-api.herokuapp.com/getBlogers/',
       responseType: 'blob',
       data: values
     }).then((res) => {
